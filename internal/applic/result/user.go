@@ -1,0 +1,22 @@
+package result
+
+import (
+	"github.com/loopopen/pkg/timex"
+	"github.com/loopopen/t-ddd-fiber3-gorm/internal/domain/entity"
+	"github.com/loopopen/t-ddd-fiber3-gorm/internal/infra"
+)
+
+//go:generate go tool shoot new -json -file=$GOFILE
+//go:generate go tool shoot map -path=../../domain/entity -way=<-  -file=$GOFILE -i
+
+type User struct {
+	infra.Mapper `json:"-"`
+	ID           uint
+	Name         string
+	Birthday     timex.Date `swaggertype:"string" example:"1987-11-29"`
+	Age          int
+}
+
+func (q *User) readEntity(e *entity.User) {
+	q.Age = e.Age()
+}

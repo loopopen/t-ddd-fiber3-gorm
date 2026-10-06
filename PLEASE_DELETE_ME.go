@@ -1,4 +1,4 @@
-package tfiberkafkagorm
+package scaffold
 
 /*
 	This variable exists solely to ensure the project runs successfully in its initial state.

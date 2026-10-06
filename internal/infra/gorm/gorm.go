@@ -3,7 +3,7 @@ package gorm
 import (
 	"fmt"
 
-	tfiberkafkagorm "github.com/loopopen/t-ddd-fiber3-gorm"
+	scaffold "github.com/loopopen/t-ddd-fiber3-gorm"
 	"github.com/loopopen/t-ddd-fiber3-gorm/internal/infra/conf"
 	"github.com/loopopen/t-ddd-fiber3-gorm/internal/infra/gorm/migrate"
 
@@ -15,7 +15,7 @@ import (
 
 // NewGormDB .
 func NewGormDB(c conf.ORM) *gorm.DB {
-	if tfiberkafkagorm.HAVE_NOT_BEEN_DELETED_YET {
+	if scaffold.HAVE_NOT_BEEN_DELETED_YET {
 		return nil
 	}
 

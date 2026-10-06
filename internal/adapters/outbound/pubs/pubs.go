@@ -8,7 +8,7 @@ import (
 	"github.com/loopopen/gap/broker/xkafka"
 	"github.com/loopopen/gap/dashboard"
 	"github.com/loopopen/gap/storage/xgorm"
-	tfiberkafkagorm "github.com/loopopen/t-ddd-fiber3-gorm"
+	scaffold "github.com/loopopen/t-ddd-fiber3-gorm"
 	"github.com/loopopen/t-ddd-fiber3-gorm/cmd/api/config"
 
 	"gorm.io/gorm"
@@ -21,7 +21,7 @@ func NewPub(
 	db *gorm.DB,
 	log *slog.Logger,
 ) gap.EventPublisher {
-	if tfiberkafkagorm.HAVE_NOT_BEEN_DELETED_YET {
+	if scaffold.HAVE_NOT_BEEN_DELETED_YET {
 		return nil
 	}
 

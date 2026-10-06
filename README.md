@@ -43,7 +43,7 @@ make wire
 make gen
 ```
 
-## 3. Run and access http://127.0.0.1:8080/swagger/index.html
+## 3. Run and access http://127.0.0.1:8080/swagger
 
 ## 4. Delete file PLEASE_DELETE_ME.go and fix your code.
 

@@ -1,4 +1,4 @@
-# <app-name>
+#
 
 ## This project is generated from template [t-ddd-fiber-gorm](https://github.com/loopopenen/t-ddd-fiber-gorm).
 
@@ -16,10 +16,6 @@ go version
 When you enter the project directory, `goenv` reads `.go-version` and switches to the matching Go version automatically.
 
 ## 2. Use make.
-* Use make to rename application name.
-```sh
-make name org=<org-name> app=<app-name>
-```
 
 * Use make to build swagger documents.
 ```sh
@@ -67,5 +63,5 @@ go install golang.org/x/tools/cmd/gonew@latest
 ### 2. Use this template to create your project.
 ```sh
 mkdir <app-name> && \
-gonew github.com/loopopen/t-ddd-fiber3-gorm github.com/<org-name>/<app-name> ./<app-name>
+gonew github.com/loopopen/t-ddd-fiber3-gorm@<version> github.com/<org-name>/<app-name> ./<app-name>
 ```

@@ -43,7 +43,7 @@ build := 1
 compose-up:
 	ORG_NAME=$(ORG_NAME) \
 	APP_NAME=$(APP_NAME) \
-	docker compose up -d $(if $(build),--build,--no-build)
+	docker compose up $(if $(build),--build,--no-build)
 compose-clean:
 	ORG_NAME=$(ORG_NAME) \
 	APP_NAME=$(APP_NAME) \

@@ -9,11 +9,11 @@ require (
 	github.com/gofiber/contrib/v3/swagger v1.0.0-rc.1
 	github.com/gofiber/fiber/v3 v3.6.0
 	github.com/google/wire v0.7.0
-	github.com/loopopen/gap v0.2.1-beta.1
-	github.com/loopopen/gap/broker/xkafka v0.2.1-beta.1
-	github.com/loopopen/gap/storage/xgorm v0.2.1-beta.1
+	github.com/loopopen/gap v0.3.0-beta.3
+	github.com/loopopen/gap/broker/xkafka v0.3.0-beta.3
+	github.com/loopopen/gap/storage/xgorm v0.3.0-beta.3
 	github.com/loopopen/pkg v0.1.2
-	github.com/loopopen/shoot v0.9.0-beta.5
+	github.com/loopopen/shoot v0.9.0
 	github.com/swaggo/swag v1.16.6
 	go.uber.org/automaxprocs v1.6.0
 	google.golang.org/protobuf v1.36.12

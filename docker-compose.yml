@@ -4,7 +4,10 @@ services:
   go-app:
     build:
       context: .
-      dockerfile: Dockerfile.debug
+      dockerfile: Dockerfile
+      target: debug
+      args:
+        COMMIT_SHA: ${COMMIT_SHA-dirty}
     container_name: ${ORG_NAME}-${APP_NAME}-debug
     depends_on:
       - mariadb

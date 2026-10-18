@@ -43,6 +43,7 @@ build := 1
 compose-up: assert-name
 	ORG_NAME=$(ORG_NAME) \
 	APP_NAME=$(APP_NAME) \
+	COMMIT_SHA=$(GIT_SHORT_SHA) \
 	docker compose up $(if $(build),--build,--no-build)
 compose-clean: assert-name
 	ORG_NAME=$(ORG_NAME) \
@@ -70,7 +71,7 @@ IMAGE_URL 	:= docker://$(IMAGE_FULL)
 build:
 	docker build \
 		--build-arg COMMIT_SHA=${GIT_SHORT_SHA} \
-		--build-arg BUILD_MODE=${config} \
+		--target ${config} \
 		--platform linux/amd64 \
 		--tag ${IMAGE_FULL} \
 		.

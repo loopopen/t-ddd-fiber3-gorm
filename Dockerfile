@@ -1,38 +1,55 @@
+ARG GO_VERSION=1.27.1
+ARG ALPINE_VERSION=3.23.4
+ARG DELVE_VERSION=v1.27.2
 ARG TARGETOS=linux
 ARG TARGETARCH=amd64
-ARG BUILD_MODE=release
 
-FROM golang:1.27-alpine AS builder
+FROM golang:${GO_VERSION}-alpine AS build-base
 WORKDIR /app
-# Use a reliable GOPROXY; change if needed
+
 ENV GOPROXY=https://goproxy.cn,direct
-# RUN apk add --no-cache git
+
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 
-FROM builder AS build-debug
+FROM build-base AS build-release
 ARG TARGETOS
 ARG TARGETARCH
-ARG COMMIT_SHA
-RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
-    go build -gcflags="all=-N -l" -tags=debug -ldflags="-X main.commitSHA=${COMMIT_SHA}" -o main ./cmd/api
-
-FROM builder AS build-release
-ARG TARGETOS
-ARG TARGETARCH
-ARG COMMIT_SHA
+ARG COMMIT_SHA=dirty
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     go build -ldflags="-s -w -X main.commitSHA=${COMMIT_SHA}" -o main ./cmd/api
 
-FROM build-${BUILD_MODE} AS build-final
+FROM build-base AS build-debug
+ARG TARGETOS
+ARG TARGETARCH
+ARG COMMIT_SHA=dirty
+ARG DELVE_VERSION
+RUN GOBIN=/app go install github.com/go-delve/delve/cmd/dlv@${DELVE_VERSION}
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    go build -gcflags="all=-N -l" -tags=debug \
+    -ldflags="-X main.commitSHA=${COMMIT_SHA}" -o main ./cmd/api
 
-FROM alpine:3.23.4
+FROM alpine:${ALPINE_VERSION} AS runtime-base
 WORKDIR /app
-# Create a non-root user and ensure permissions for /app
-RUN addgroup -S app && adduser -S app -G app && mkdir -p /app/etc && chown -R app:app /app
-COPY --from=build-final /app/main .
-COPY ./cmd/api/etc/config.yaml ./etc/config.yaml
+
+RUN addgroup -S app \
+    && adduser -S app -G app \
+    && mkdir -p /app/etc \
+    && chown -R app:app /app
+COPY --chown=app:app ./cmd/api/etc/config.yaml ./etc/config.yaml
+
 USER app
 EXPOSE 8080
+
+FROM runtime-base AS release
+COPY --from=build-release --chown=app:app /app/main ./main
 CMD ["./main"]
+
+FROM runtime-base AS debug
+COPY --from=build-debug --chown=app:app /app/main ./main
+COPY --from=build-debug --chown=app:app /app/dlv ./dlv
+EXPOSE 40000
+CMD ["./dlv", "--listen=:40000", "--headless=true", "--api-version=2", "--accept-multiclient", "exec", "./main"]
+
+FROM release AS final
